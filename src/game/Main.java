@@ -6,6 +6,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.animation.TranslateTransition;
+import javafx.animation.Interpolator;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
+import javafx.scene.input.MouseEvent;
+
 
 public class Main extends Application{
 	
@@ -13,11 +21,22 @@ public class Main extends Application{
 	private Group root = null;
 	private ImageView bkgrd = null ;
 	private Node flappy = null;
+	private TranslateTransition jump;
 	
     private void addActionEventHandler(){
+    	button.setOnAction(new EventHandler<ActionEvent>(){
+    		public void handle(ActionEvent event){
+    			
+    		}
+    	});
     }
     
     private void addMouseEventHandler(){
+    	bkgrd.onMouseClickedProperty().set(new EventHandler<MouseEvent>(){
+    		public void handle(MouseEvent event){
+    			
+    		}
+    	});
     }	
 	
 	@Override
@@ -29,11 +48,13 @@ public class Main extends Application{
 		
 		
 		//TODO 2: add Flappy
-
+		flappy = new ImageView("flappy.png");
 		
 		
 		//TODO 3: add Button
-
+		button = new Button();
+		button.setLayoutX(200);
+		button.setLayoutY(200);
 		
 		
 		//Create a Group 
@@ -47,6 +68,16 @@ public class Main extends Application{
 		addMouseEventHandler();
 		
 		
+		//add Interpolator
+		jump = new TranslateTransition(Duration.millis(2000), flappy);
+		jump.setCycleCount(Timeline.INDEFINITE);
+		jump.setInterpolator(new Interpolator(){
+			protected double curve(double t){
+				double a = 0.9;
+				return a * t * t + (1 - a) * t;
+			}
+		});
+		
 		//Create scene and add to stage
 		Scene scene = new Scene(root, 400, 400);
 		primaryStage.setScene(scene);
@@ -55,7 +86,7 @@ public class Main extends Application{
 	}
 
 	public static void main(String[] args) {
-		Application.launch(args);
+		launch(args);
 	}
 
 }
